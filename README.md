@@ -7,7 +7,7 @@ This code provides an interface for ConceptNet 5 in Python.
 
 A copy of ConceptNet 5 as a comma-separated values file (.csv) is required. This is available [here](http://conceptnet5.media.mit.edu/downloads/current/conceptnet5_flat_csv_5.4.tar.bz2).
 
-Download in the conceptnetter directory and run ConceptNetter.py:
+Move to the conceptnetter directory and run ConceptNetter.py:
 
 ```python
 python conceptNetter.py
