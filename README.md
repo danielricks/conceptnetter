@@ -7,10 +7,12 @@ This code provides an interface for ConceptNet 5 in Python.
 
 A copy of ConceptNet 5 as a comma-separated values file (.csv) is required. This is available [here](http://conceptnet5.media.mit.edu/downloads/current/conceptnet5_flat_csv_5.4.tar.bz2).
 
-Move to the conceptnetter directory and run ConceptNetter.py:
+Move to the conceptnetter directory and run the following Python code:
 
 ```python
-python conceptNetter.py
+import conceptNetter as cn
+c = cn.ConceptNetter()
+c.create_english_CSV_file()
 ```
 
 This will truncate the data to only use the English langauge assertions found in the ConceptNet 5 database.
