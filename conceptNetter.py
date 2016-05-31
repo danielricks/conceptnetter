@@ -1,6 +1,16 @@
 import csv, re, os
 
-'''
+''' Files used by this class:
+		english_assertions.csv
+		possibly data/assertions/parts00.csv
+		possibly data/assertions/parts01.csv
+		possibly data/assertions/parts02.csv
+		possibly data/assertions/parts03.csv
+		possibly data/assertions/parts04.csv
+		possibly data/assertions/parts05.csv
+		possibly data/assertions/parts06.csv
+		possibly data/assertions/parts07.csv
+
  Class Summary: ConceptNetter()
  Methods:	look_up_word([word])
 			get_parts([word])
