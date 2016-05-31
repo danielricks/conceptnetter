@@ -15,10 +15,10 @@ class ConceptNetter:
 
 	# Creates a single file for all English information in Conceptnet 5. Takes about 1:41.
 	def create_english_CSV_file(self):
-		with open("english_assertions.csv", "wb") as f:
+		with open("conceptnetter/english_assertions.csv", "wb") as f:
 			output_file = csv.writer(f)
 			for x in xrange(7):
-				file_name = 'data/assertions/part_0' + str(x) + '.csv'
+				file_name = 'conceptnetter/data/assertions/part_0' + str(x) + '.csv'
 				print 'Loading ' + file_name
 				with open(file_name, 'rb') as g:
 					reader = csv.reader(g, delimiter='\t', quoting=csv.QUOTE_NONE)
@@ -112,12 +112,4 @@ class ConceptNetter:
 				if result != word:
 					parts_rels.append(result)
 		return parts_rels
-
-'''
-import conceptNetter
-c = conceptNetter.ConceptNetter()
-c.create_english_CSV_file()
-c.get_hypernyms('door')
-c.get_related_words('door')
-'''
 
