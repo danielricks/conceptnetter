@@ -125,9 +125,8 @@ class ConceptNetter:
 '''
 import conceptNetter
 c = conceptNetter.ConceptNetter()
+c.create_english_CSV_file()
 c.get_hypernyms('door')
 c.get_related_words('door')
 '''
-#c = ConceptNetter()
-#c.create_english_CSV_file()
 
