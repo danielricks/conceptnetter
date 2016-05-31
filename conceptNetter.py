@@ -1,4 +1,4 @@
-import csv, re
+import csv, re, os
 
 '''
  Class Summary: ConceptNetter()
@@ -15,23 +15,24 @@ class ConceptNetter:
 
 	# Creates a single file for all English information in Conceptnet 5. Takes about 1:41.
 	def create_english_CSV_file(self):
-		f = open("english_assertions.csv", "wb")
-		output_file = csv.writer(f)
-		for x in xrange(7):
-			file_name = 'data/assertions/part_0' + str(x) + '.csv'
-			print 'Loading ' + file_name
-			with open(file_name, 'rb') as f:
-				reader = csv.reader(f, delimiter='\t', quoting=csv.QUOTE_NONE)
-				for row in reader:
-					if '/c/en/' in row[0]:
-						output_file.writerow(row)
-		f.close()
+		with open("english_assertions.csv", "wb") as f:
+			output_file = csv.writer(f)
+			for x in xrange(7):
+				file_name = 'data/assertions/part_0' + str(x) + '.csv'
+				print 'Loading ' + file_name
+				with open(file_name, 'rb') as g:
+					reader = csv.reader(g, delimiter='\t', quoting=csv.QUOTE_NONE)
+					for row in reader:
+						if '/c/en/' in row[0]:
+							output_file.writerow(row)
 		print 'Done creating ConceptNet 5 English file.'
 
 	# Loads Conceptnet 5 into a dictionary. Takes about :54.
 	def load_conceptnet(self):
 		self.net = {}
-		file_name = "english_assertions.csv"
+		file_name = "conceptnetter/english_assertions.csv"
+		if not os.path.exists(file_name):
+			return
 		print 'Loading ' + file_name
 		with open(file_name, 'rb') as f:
 
