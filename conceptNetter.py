@@ -49,21 +49,28 @@ class ConceptNetter:
 						surface_start = pieces[1].split('/')[len(pieces[1].split('/')) - 2].lower()
 						surface_end = pieces[2].split('/')[len(pieces[2].split('/')) - 2].lower()
 
-						# Verify that each word is longer than a single character, that Unicode characters don't show up in the output, and that other languages don't show up (Not sure if the '\\x' checks work)
-						if len(surface_start) > 1 and not '\\x' in surface_start and len(surface_end) > 1 and not '\\x' in surface_end and rel != 'TranslationOf':
+						# Check for Unicode characters.
+						try:
+							surface_start.decode('ascii')
+							surface_end.decode('ascii')
+						except:
+							pass # It was a unicode format (Ex: '\xe9\x96\x80')
+						else:
+							# Verify that each word is longer than a single character and that other languages don't show up
+							if len(surface_start) > 1 and len(surface_end) > 1 and rel != 'TranslationOf':
 
 							# Checking whether a word had already been added was very inefficient, so now it's hacky
-							try:
-								self.net[surface_start].append(surface_start + ' ' + rel + ' ' + surface_end)
-							except:
-								self.net[surface_start] = []
-								self.net[surface_start].append(surface_start + ' ' + rel + ' ' + surface_end)
+								try:
+									self.net[surface_start].append(surface_start + ' ' + rel + ' ' + surface_end)
+								except:
+									self.net[surface_start] = []
+									self.net[surface_start].append(surface_start + ' ' + rel + ' ' + surface_end)
 
-							try:
-								self.net[surface_end].append(surface_start + ' ' + rel + ' ' + surface_end)
-							except:
-								self.net[surface_end] = []
-								self.net[surface_end].append(surface_start + ' ' + rel + ' ' + surface_end)
+								try:
+									self.net[surface_end].append(surface_start + ' ' + rel + ' ' + surface_end)
+								except:
+									self.net[surface_end] = []
+									self.net[surface_end].append(surface_start + ' ' + rel + ' ' + surface_end)
 		print 'Done loading ConceptNet 5.'
 
 	# Returns all information about a single word.
@@ -72,34 +79,55 @@ class ConceptNetter:
 
 	# Returns all 'word HasA x' relationships in Conceptnet 5.
 	def get_parts(self, word):
-		rels = self.look_up_word(word)
-		parts_rels = []
-		for rel in rels:
-			searchObj = re.search(word + ' HasA', rel, re.M|re.I)
-			if searchObj:
-				parts_rels.append(rel)
-		return parts_rels
+		pattern = word + ' HasA'
+		return self.get_relationship(pattern, word)
 
 	# Returns all 'x RelatedTo word' relationships in Conceptnet 5.
 	def get_related_words(self, word):
-		rels = self.look_up_word(word)
-		parts_rels = []
-		for rel in rels:
-			searchObj = re.search('RelatedTo ' + word, rel, re.M|re.I)
-			if searchObj:
-				parts_rels.append(rel)
-		return parts_rels
+		pattern = 'RelatedTo ' + word
+		return self.get_relationship(pattern, word)
 
 	# Returns all 'word IsA x' relationships in Conceptnet 5.
 	def get_hypernyms(self, word):
+		pattern = word + ' IsA'
+		return self.get_relationship(pattern, word)
+
+	# Returns all every instance of a relationship.
+	def get_relationship_full(self, pattern):
 		rels = self.look_up_word(word)
 		parts_rels = []
 		for rel in rels:
-			searchObj = re.search(word + ' IsA', rel, re.M|re.I)
+			searchObj = re.search(pattern, rel, re.M|re.I)
 			if searchObj:
 				parts_rels.append(rel)
 		return parts_rels
 
-c = ConceptNetter()
-c.create_english_CSV_file()
+	# Returns a list of the words that match instances of a relationship.
+	def get_relationship(self, pattern, word):
+		pieces = pattern.split()
+		result_index = 0
+		# Decide whether the result word is in the 0th or the 2nd index
+		if pieces[0] == word:
+			result_index = 2
+		# Get relationships for the word
+		rels = self.look_up_word(word)
+		parts_rels = []
+		for rel in rels:
+			searchObj = re.search(pattern, rel, re.M|re.I)
+			# If the word exists...
+			if searchObj:
+				result = rel.split()[result_index]
+				# If the relationship isn't backwords due to compound words ('trapdoor', etc.)...
+				if result != word:
+					parts_rels.append(result)
+		return parts_rels
+
+'''
+import conceptNetter
+c = conceptNetter.ConceptNetter()
+c.get_hypernyms('door')
+c.get_related_words('door')
+'''
+#c = ConceptNetter()
+#c.create_english_CSV_file()
 
