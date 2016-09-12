@@ -24,7 +24,7 @@ This code is set up to run in Python. Example commands are below.
 ```python
 import conceptnetter.conceptNetter as cn
 c = cn.ConceptNetter()
-c.look_up_words('dog')
+c.look_up_word('dog')
 c.get_parts('mailbox')
 c.get_related_words('door')
 c.get_hypernyms('door')
